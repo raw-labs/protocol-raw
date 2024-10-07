@@ -35,7 +35,6 @@ lazy val commonSettings = Seq(
   // http://www.scala-sbt.org/0.13/docs/Cached-Resolution.html
   updateOptions := updateOptions.in(Global).value.withCachedResolution(true),
   versionScheme := Some("early-semver"),
-  publish / skip := false,
   publishMavenStyle := true,
   publishTo := Some( "GitHub Package Registry" at s"https://maven.pkg.github.com/$githubRepo"),
   publishConfiguration := publishConfiguration.value.withOverwrite(sys.env.getOrElse("CI", "false").toBoolean)
