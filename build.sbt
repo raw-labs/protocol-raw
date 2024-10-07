@@ -10,7 +10,7 @@ ThisBuild / credentials += Credentials(
   sys.env.getOrElse("GITHUB_TOKEN", "")
 )
 
-lazy val githubRepo = "raw-labs/protocol-raw"
+val githubRepo = "raw-labs/protocol-raw"
 
 lazy val commonSettings = Seq(
   homepage := Some(url(s"https://github.com/$githubRepo")),
