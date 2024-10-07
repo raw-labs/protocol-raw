@@ -10,10 +10,10 @@ ThisBuild / credentials += Credentials(
   sys.env.getOrElse("GITHUB_TOKEN", "")
 )
 
-val isRelease = sys.props.getOrElse("release", "false").toBoolean
+val githubRepo = "raw-labs/protocol-raw"
 
 lazy val commonSettings = Seq(
-  homepage := Some(url("https://www.raw-labs.com/")),
+  homepage := Some(url(s"https://github.com/$githubRepo")),
   organization := "com.raw-labs",
   organizationName := "RAW Labs SA",
   startYear := Some(2023),
@@ -24,18 +24,24 @@ lazy val commonSettings = Seq(
       "https://raw.githubusercontent.com/raw-labs/snapi/main/licenses/BSL.txt"
     ).toURL
   ),
+  scmInfo := Some(
+  ScmInfo(
+    url(s"https://github.com/$githubRepo"),
+    s"scm:git@github.com:$githubRepo.git"
+  )
+  ),
   headerSources / excludeFilter := HiddenFileFilter,
   // Use cached resolution of dependencies
   // http://www.scala-sbt.org/0.13/docs/Cached-Resolution.html
   updateOptions := updateOptions.in(Global).value.withCachedResolution(true),
-  resolvers ++= Seq(Resolver.mavenLocal),
-  resolvers ++= Resolver.sonatypeOssRepos("snapshots"),
-  resolvers ++= Resolver.sonatypeOssRepos("releases")
+  versionScheme := Some("early-semver"),
+  publishMavenStyle := true,
+  publishTo := Some( "GitHub Package Registry" at s"https://maven.pkg.github.com/$githubRepo"),
+  publishConfiguration := publishConfiguration.value.withOverwrite(sys.env.getOrElse("CI", "false").toBoolean)
 )
 
 lazy val buildSettings = Seq(
   scalaVersion := "2.12.18",
-  isSnapshot := !isRelease,
   javacOptions ++= Seq(
     "-source",
     "21",
@@ -102,17 +108,6 @@ lazy val testSettings = Seq(
   Test / packageSrc / publishArtifact := true
 )
 
-val isCI = sys.env.getOrElse("CI", "false").toBoolean
-
-lazy val publishSettings = Seq(
-  versionScheme := Some("early-semver"),
-  publish / skip := false,
-  publishMavenStyle := true,
-  // Temporarily publishing to the Snapi repo until the migration is finished...
-  publishTo := Some("GitHub raw-labs Apache Maven Packages" at "https://maven.pkg.github.com/raw-labs/snapi"),
-  publishConfiguration := publishConfiguration.value.withOverwrite(isCI)
-)
-
 lazy val strictBuildSettings = commonSettings ++ compileSettings ++ buildSettings ++ testSettings ++ Seq(
   scalacOptions ++= Seq(
     "-Xfatal-warnings"
@@ -125,7 +120,6 @@ lazy val root = (project in file("."))
   .settings(
     name := "protocol-raw",
     strictBuildSettings,
-    publishSettings,
         // Set fixed versions
     ProtobufConfig / version := "3.25.4",
     ProtobufConfig / protobufGrpcVersion := "1.62.2",
