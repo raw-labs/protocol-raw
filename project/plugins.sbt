@@ -14,7 +14,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.12.0")
 
 addSbtPlugin("com.github.sbt" % "sbt-protobuf" % "0.8.0")
 
-resolvers += "RAW Labs GitHub Packages" at "https://maven.pkg.github.com/raw-labs/sbt-module-patcher"
+resolvers += "RAW Labs GitHub Packages" at "https://maven.pkg.github.com/raw-labs/_"
 
 ThisBuild / credentials += Credentials(
   "GitHub Package Registry",
