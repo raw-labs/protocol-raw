@@ -23,6 +23,6 @@ ThisBuild / credentials += Credentials(
   sys.env.getOrElse("GITHUB_TOKEN", "")
 )
 
-addSbtPlugin("com.raw-labs" % "sbt-module-patcher" % "0.1.1")
+addSbtPlugin("com.raw-labs" % "sbt-module-patcher" % "0.1.2")
 
 addSbtPlugin("com.raw-labs" % "sbt-versioner" % "0.1.0")
